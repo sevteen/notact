@@ -33,9 +33,9 @@ public class KafkaStandingsProvider implements StandingsProvider {
     private StreamBuilder<OperationStarted> startedStreamBuilder;
     private StreamBuilder<OperationCompleted> completedStreamBuilder;
 
-    public KafkaStandingsProvider(String kafkaAddress, String startedTopic, String completedTopic) {
-        startedStreamBuilder = new StreamBuilder<>(kafkaAddress, "started-app-id", startedTopic, ModelSerdes.OPERATION_STARTED);
-        completedStreamBuilder = new StreamBuilder<>(kafkaAddress, "completed-app-id", completedTopic, ModelSerdes.OPERATION_COMPLETED);
+    public KafkaStandingsProvider(String kafkaAddress, String appId, String startedTopic, String completedTopic) {
+        startedStreamBuilder = new StreamBuilder<>(kafkaAddress, "started-" + appId, startedTopic, ModelSerdes.OPERATION_STARTED);
+        completedStreamBuilder = new StreamBuilder<>(kafkaAddress, "completed-" + appId, completedTopic, ModelSerdes.OPERATION_COMPLETED);
 
         KStream<String, OperationStarted> startedStream = startedStreamBuilder.build();
         startedStream.foreach((key, operationStarted) -> {

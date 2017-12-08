@@ -20,13 +20,16 @@ public class Application {
     @Value("${topic.completed}")
     private String completedTopic;
 
+    @Value("${application.id}")
+    private String applicationId;
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 
     @Bean(initMethod = "start", destroyMethod = "stop")
     public StandingsProvider standingsProvider() {
-        return new KafkaStandingsProvider(kafkaAddress, startedTopic, completedTopic);
+        return new KafkaStandingsProvider(kafkaAddress, applicationId, startedTopic, completedTopic);
     }
 
 }
