@@ -1,7 +1,6 @@
 package com.example.standings;
 
 import com.ecample.model.serde.ModelSerdes;
-import com.example.model.User;
 import com.example.model.event.OperationCompleted;
 import com.example.model.event.OperationStarted;
 import org.apache.kafka.common.serialization.Serde;
@@ -40,17 +39,15 @@ public class KafkaStandingsProvider implements StandingsProvider {
 
         KStream<String, OperationStarted> startedStream = startedStreamBuilder.build();
         startedStream.foreach((key, operationStarted) -> {
-            User user = operationStarted.getUser();
-            boolean newParticipant = participants.putIfAbsent(user.getName(),
-                new Participant(user.getName(), operationStarted.getOperationId(), LocalDateTime.now(), 0)) == null;
+            boolean newParticipant = participants.putIfAbsent(operationStarted.getUser(),
+                new Participant(operationStarted.getUser(), operationStarted.getOperationId(), LocalDateTime.now(), 0)) == null;
             if (newParticipant) {
-                log.info("New participant \"{}\"", user.getName());
+                log.info("New participant \"{}\"", operationStarted.getUser());
             }
         });
 
         completedStreamBuilder.build().foreach((key, operationCompleted) -> {
-            User user = operationCompleted.getUser();
-            Participant participant = participants.get(user.getName());
+            Participant participant = participants.get(operationCompleted.getUser());
             if (participant != null) {
                 if (!participant.getOperationId().equals(operationCompleted.getOperationId())) {
                     log.info("Participant \"{}\" is now busy with operation \"{}\"", participant.getOperationId());
@@ -58,7 +55,7 @@ public class KafkaStandingsProvider implements StandingsProvider {
                     participant.calculateScore();
                 }
             } else {
-                log.info("Participant with \"{}\" does not exist", user.getName());
+                log.info("Participant with \"{}\" does not exist", operationCompleted.getUser());
             }
         });
     }

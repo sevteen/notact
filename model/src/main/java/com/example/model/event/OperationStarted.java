@@ -1,21 +1,19 @@
 package com.example.model.event;
 
-import com.example.model.User;
-
 /**
  * @author Beka Tsotsoria
  */
 public class OperationStarted {
 
-    private User user;
+    private String user;
     private String operationId;
 
-    public OperationStarted(User user, String operationId) {
+    public OperationStarted(String user, String operationId) {
         this.user = user;
         this.operationId = operationId;
     }
 
-    public User getUser() {
+    public String getUser() {
         return user;
     }
 

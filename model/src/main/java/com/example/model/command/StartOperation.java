@@ -1,21 +1,23 @@
 package com.example.model.command;
 
-import com.example.model.User;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author Beka Tsotsoria
  */
 public class StartOperation {
 
-    private User user;
+    private String user;
     private String operationId;
 
-    public StartOperation(User user, String operationId) {
+    @JsonCreator
+    public StartOperation(@JsonProperty("user") String user, @JsonProperty("operationId") String operationId) {
         this.user = user;
         this.operationId = operationId;
     }
 
-    public User getUser() {
+    public String getUser() {
         return user;
     }
 

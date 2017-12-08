@@ -1,6 +1,5 @@
 package com.ecample.model.serde;
 
-import com.example.model.User;
 import com.example.model.event.OperationStarted;
 import org.apache.kafka.common.serialization.Deserializer;
 
@@ -22,7 +21,7 @@ public class OperationStartedDeserializer implements Deserializer<OperationStart
         if (data == null) return null;
         try {
             String[] strs = new String(data, "UTF-8").split("\\|");
-            return new OperationStarted(new User(strs[1]), strs[0]);
+            return new OperationStarted(strs[1], strs[0]);
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("No UTF-8", e);
         }

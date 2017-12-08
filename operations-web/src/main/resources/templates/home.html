@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Operations</title>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+</head>
+<body>
+<div>
+    <input type="text" data-bind="visible: !started(), textInput: name"/>
+    <p data-bind="visible: started, text: timer"></p>
+    <button data-bind="visible: !started(), enable: hasValidName(), click: start">Start</button>
+    <button data-bind="visible: started, click: stop">Stop</button>
+</div>
+<script type="text/javascript">
+    function Operations() {
+
+        var self = this;
+
+        this.name = ko.observable();
+        this.started = ko.observable();
+        this.timer = ko.observable();
+
+        this.timerInterval;
+
+        this.start = function () {
+            $.ajax({
+                url: '/start',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    user: this.name(),
+                    operationId: 'breath-hold'
+                }),
+                success: function () {
+                    self.started(true);
+                    var seconds = 0;
+                    self.timer(0);
+                    self.timerInterval = setInterval(function () {
+                        self.timer(++seconds);
+                    }, 1000);
+                }
+            });
+        };
+
+        this.stop = function () {
+            $.post({
+                url: '/complete',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    user: this.name(),
+                    operationId: 'breath-hold'
+                }),
+                success: function () {
+                    self.started(false);
+                    clearInterval(self.timerInterval);
+                }
+            });
+        };
+
+        this.hasValidName = function () {
+            return !!this.name();
+        }
+    }
+
+    $(function () {
+        ko.applyBindings(new Operations());
+    });
+</script>
+</body>
+</html>

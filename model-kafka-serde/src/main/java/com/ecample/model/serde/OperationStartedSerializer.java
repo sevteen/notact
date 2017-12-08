@@ -20,7 +20,7 @@ public class OperationStartedSerializer implements Serializer<OperationStarted> 
     public byte[] serialize(String topic, OperationStarted data) {
         if (data == null) return null;
         try {
-            return (data.getOperationId() + "|" + data.getUser().getName()).getBytes("UTF-8");
+            return (data.getOperationId() + "|" + data.getUser()).getBytes("UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("No UTF-8", e);
         }

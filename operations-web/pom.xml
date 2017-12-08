@@ -9,11 +9,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>standings-web</artifactId>
+    <artifactId>operations-web</artifactId>
 
     <properties>
         <spring.boot.version>1.5.7.RELEASE</spring.boot.version>
     </properties>
+
 
     <build>
         <plugins>
@@ -35,7 +36,7 @@
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>1.0.0</version>
                 <configuration>
-                    <imageName>sevteen/notact-standings</imageName>
+                    <imageName>sevteen/notact-operations</imageName>
                     <baseImage>java</baseImage>
                     <entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
                     <resources>
@@ -57,15 +58,11 @@
     <dependencies>
         <dependency>
             <groupId>com.example</groupId>
-            <artifactId>standings-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.example</groupId>
             <artifactId>model</artifactId>
         </dependency>
         <dependency>
             <groupId>com.example</groupId>
-            <artifactId>standings-kafka</artifactId>
+            <artifactId>eventbus-kafka</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

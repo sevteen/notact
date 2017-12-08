@@ -15,6 +15,7 @@
         <module>eventbus-kafka</module>
         <module>standings-web</module>
         <module>model-kafka-serde</module>
+        <module>operations-web</module>
     </modules>
 
     <build>

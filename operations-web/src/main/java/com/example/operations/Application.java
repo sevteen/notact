@@ -1,5 +1,8 @@
-package com.example.standings;
+package com.example.operations;
 
+import com.example.eventbus.kafka.KafkaEventBus;
+import com.example.model.EventBus;
+import com.example.model.OperationProcessor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,9 +27,13 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
-    @Bean(initMethod = "start", destroyMethod = "stop")
-    public StandingsProvider standingsProvider() {
-        return new KafkaStandingsProvider(kafkaAddress, startedTopic, completedTopic);
+    @Bean
+    public OperationProcessor operationProcessor() {
+        return new OperationProcessor(kafkaEventBus());
     }
 
+    @Bean(initMethod = "open", destroyMethod = "close")
+    public EventBus kafkaEventBus() {
+        return new KafkaEventBus(kafkaAddress, startedTopic, completedTopic);
+    }
 }

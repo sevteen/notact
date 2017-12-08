@@ -16,14 +16,19 @@ import java.util.Properties;
  */
 public class KafkaEventBus implements EventBus {
 
+    private String address;
     private String startedTopic;
     private String completedTopic;
     private KafkaProducer<String, OperationStarted> startedProducer;
     private KafkaProducer<String, OperationCompleted> completedProducer;
 
     public KafkaEventBus(String address, String startedTopic, String completedTopic) {
+        this.address = address;
         this.startedTopic = startedTopic;
         this.completedTopic = completedTopic;
+    }
+
+    public void open() {
         Properties props = new Properties();
         props.put("bootstrap.servers", address);
         startedProducer = new KafkaProducer<>(props, new StringSerializer(), new OperationStartedSerializer());
@@ -38,5 +43,13 @@ public class KafkaEventBus implements EventBus {
     @Override
     public void publish(OperationCompleted operationCompleted) {
         completedProducer.send(new ProducerRecord<>(completedTopic, operationCompleted));
+    }
+
+    public void close() {
+        try {
+            startedProducer.close();
+        } finally {
+            completedProducer.close();
+        }
     }
 }
