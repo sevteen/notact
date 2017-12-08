@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Operations</title>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -11,6 +11,7 @@
     <p data-bind="visible: started, text: timer"></p>
     <button data-bind="visible: !started(), enable: hasValidName(), click: start">Start</button>
     <button data-bind="visible: started, click: stop">Stop</button>
+    <div><a th:href="${standingsUrl}">Show standings</a></div>
 </div>
 <script type="text/javascript">
     function Operations() {

@@ -4,7 +4,9 @@ import com.example.model.OperationProcessor;
 import com.example.model.command.CompleteOperation;
 import com.example.model.command.StartOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,13 +20,17 @@ public class AppController {
 
     private OperationProcessor operationProcessor;
 
+    @Value("${standings.url}")
+    private String standingsUrl;
+
     @Autowired
     public AppController(OperationProcessor operationProcessor) {
         this.operationProcessor = operationProcessor;
     }
 
     @RequestMapping("/")
-    public String home() {
+    public String home(Model model) {
+        model.addAttribute("standingsUrl", standingsUrl);
         return "home";
     }
 
