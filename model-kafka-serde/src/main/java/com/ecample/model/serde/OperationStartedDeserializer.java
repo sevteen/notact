@@ -21,7 +21,7 @@ public class OperationStartedDeserializer implements Deserializer<OperationStart
         if (data == null) return null;
         try {
             String[] strs = new String(data, "UTF-8").split("\\|");
-            return new OperationStarted(strs[1], strs[0]);
+            return new OperationStarted(strs[0], strs[1]);
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("No UTF-8", e);
         }

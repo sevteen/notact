@@ -21,7 +21,7 @@ public class OperationCompletedSerializer implements Serializer<OperationComplet
     public byte[] serialize(String topic, OperationCompleted data) {
         if (data == null) return null;
         try {
-            return (data.getOperationId() + "|" + data.getUser()).getBytes("UTF-8");
+            return (data.getUser() + "|" + data.getOperationId()).getBytes("UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("No UTF-8", e);
         }
