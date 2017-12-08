@@ -8,7 +8,7 @@ import com.example.model.event.OperationStarted;
  */
 public interface EventBus {
 
-	void publish(OperationStarted operationStarted);
+    void publish(OperationStarted operationStarted);
 
-	void publish(OperationCompleted operationCompleted);
+    void publish(OperationCompleted operationCompleted);
 }

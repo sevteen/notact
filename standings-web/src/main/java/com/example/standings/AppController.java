@@ -16,33 +16,33 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class AppController {
 
-	private OperationProcessor operationProcessor;
-	private StandingsProvider standingsProvider;
+    private OperationProcessor operationProcessor;
+    private StandingsProvider standingsProvider;
 
-	@Autowired
-	public AppController(OperationProcessor operationProcessor, StandingsProvider standingsProvider) {
-		this.operationProcessor = operationProcessor;
-		this.standingsProvider = standingsProvider;
-	}
+    @Autowired
+    public AppController(OperationProcessor operationProcessor, StandingsProvider standingsProvider) {
+        this.operationProcessor = operationProcessor;
+        this.standingsProvider = standingsProvider;
+    }
 
-	@RequestMapping("/")
-	public String index() {
-		return "home";
-	}
+    @RequestMapping("/")
+    public String index() {
+        return "home";
+    }
 
-	@RequestMapping("/standings")
-	public String standings(Model model) {
-		model.addAttribute("standings", standingsProvider.getStandings());
-		return "standings";
-	}
+    @RequestMapping("/standings")
+    public String standings(Model model) {
+        model.addAttribute("standings", standingsProvider.getStandings());
+        return "standings";
+    }
 
-	@RequestMapping(value = "/start", method = RequestMethod.POST)
-	public void startOperation(@RequestBody StartOperation startOperation) {
-		operationProcessor.process(startOperation);
-	}
+    @RequestMapping(value = "/start", method = RequestMethod.POST)
+    public void startOperation(@RequestBody StartOperation startOperation) {
+        operationProcessor.process(startOperation);
+    }
 
-	@RequestMapping(value = "/complete", method = RequestMethod.POST)
-	public void completeOperation(@RequestBody CompleteOperation completeOperation) {
-		operationProcessor.process(completeOperation);
-	}
+    @RequestMapping(value = "/complete", method = RequestMethod.POST)
+    public void completeOperation(@RequestBody CompleteOperation completeOperation) {
+        operationProcessor.process(completeOperation);
+    }
 }

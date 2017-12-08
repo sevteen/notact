@@ -14,31 +14,31 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class Application {
 
-	@Value("${kafka.address}")
-	private String kafkaAddress;
+    @Value("${kafka.address}")
+    private String kafkaAddress;
 
-	@Value("${topic.started}")
-	private String startedTopic;
+    @Value("${topic.started}")
+    private String startedTopic;
 
-	@Value("${topic.completed}")
-	private String completedTopic;
+    @Value("${topic.completed}")
+    private String completedTopic;
 
-	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
 
-	@Bean
-	public OperationProcessor operationProcessor() {
-		return new OperationProcessor(kafkaEventBus());
-	}
+    @Bean
+    public OperationProcessor operationProcessor() {
+        return new OperationProcessor(kafkaEventBus());
+    }
 
-	@Bean(initMethod = "start", destroyMethod = "stop")
-	public StandingsProvider standingsProvider() {
-		return new KafkaStandingsProvider(kafkaAddress, startedTopic, completedTopic);
-	}
+    @Bean(initMethod = "start", destroyMethod = "stop")
+    public StandingsProvider standingsProvider() {
+        return new KafkaStandingsProvider(kafkaAddress, startedTopic, completedTopic);
+    }
 
-	private EventBus kafkaEventBus() {
-		return new KafkaEventBus(kafkaAddress, startedTopic, completedTopic);
-	}
+    private EventBus kafkaEventBus() {
+        return new KafkaEventBus(kafkaAddress, startedTopic, completedTopic);
+    }
 
 }

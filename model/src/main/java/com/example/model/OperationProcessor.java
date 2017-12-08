@@ -10,17 +10,17 @@ import com.example.model.event.OperationStarted;
  */
 public class OperationProcessor {
 
-	private EventBus eventBus;
+    private EventBus eventBus;
 
-	public OperationProcessor(EventBus eventBus) {
-		this.eventBus = eventBus;
-	}
+    public OperationProcessor(EventBus eventBus) {
+        this.eventBus = eventBus;
+    }
 
-	public void process(StartOperation startOperation) {
-		eventBus.publish(new OperationStarted(startOperation.getUser(), startOperation.getOperationId()));
-	}
+    public void process(StartOperation startOperation) {
+        eventBus.publish(new OperationStarted(startOperation.getUser(), startOperation.getOperationId()));
+    }
 
-	public void process(CompleteOperation completeOperation) {
-		eventBus.publish(new OperationCompleted(completeOperation.getUser(), completeOperation.getOperationId()));
-	}
+    public void process(CompleteOperation completeOperation) {
+        eventBus.publish(new OperationCompleted(completeOperation.getUser(), completeOperation.getOperationId()));
+    }
 }

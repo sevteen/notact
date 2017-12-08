@@ -7,27 +7,27 @@ import com.example.model.User;
  */
 public class StartOperation {
 
-	private User user;
-	private String operationId;
+    private User user;
+    private String operationId;
 
-	public StartOperation(User user, String operationId) {
-		this.user = user;
-		this.operationId = operationId;
-	}
+    public StartOperation(User user, String operationId) {
+        this.user = user;
+        this.operationId = operationId;
+    }
 
-	public User getUser() {
-		return user;
-	}
+    public User getUser() {
+        return user;
+    }
 
-	public String getOperationId() {
-		return operationId;
-	}
+    public String getOperationId() {
+        return operationId;
+    }
 
-	@Override
-	public String toString() {
-		return "StartOperation{" +
-				"user=" + user +
-				", operationId='" + operationId + '\'' +
-				'}';
-	}
+    @Override
+    public String toString() {
+        return "StartOperation{" +
+            "user=" + user +
+            ", operationId='" + operationId + '\'' +
+            '}';
+    }
 }

@@ -11,23 +11,23 @@ import java.util.Map;
  */
 public class OperationStartedSerializer implements Serializer<OperationStarted> {
 
-	@Override
-	public void configure(Map<String, ?> configs, boolean isKey) {
+    @Override
+    public void configure(Map<String, ?> configs, boolean isKey) {
 
-	}
+    }
 
-	@Override
-	public byte[] serialize(String topic, OperationStarted data) {
-		if (data == null) return null;
-		try {
-			return (data.getOperationId() + "|" + data.getUser().getName()).getBytes("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException("No UTF-8", e);
-		}
-	}
+    @Override
+    public byte[] serialize(String topic, OperationStarted data) {
+        if (data == null) return null;
+        try {
+            return (data.getOperationId() + "|" + data.getUser().getName()).getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("No UTF-8", e);
+        }
+    }
 
-	@Override
-	public void close() {
+    @Override
+    public void close() {
 
-	}
+    }
 }

@@ -7,13 +7,13 @@ import java.util.List;
  */
 public class Standings {
 
-	private List<Participant> participants;
+    private List<Participant> participants;
 
-	public Standings(List<Participant> participants) {
-		this.participants = participants;
-	}
+    public Standings(List<Participant> participants) {
+        this.participants = participants;
+    }
 
-	public List<Participant> getParticipants() {
-		return participants;
-	}
+    public List<Participant> getParticipants() {
+        return participants;
+    }
 }

@@ -5,5 +5,5 @@ package com.example.standings;
  */
 public interface StandingsProvider {
 
-	Standings getStandings();
+    Standings getStandings();
 }

@@ -12,24 +12,24 @@ import java.util.Map;
  */
 public class OperationStartedDeserializer implements Deserializer<OperationStarted> {
 
-	@Override
-	public void configure(Map<String, ?> configs, boolean isKey) {
+    @Override
+    public void configure(Map<String, ?> configs, boolean isKey) {
 
-	}
+    }
 
-	@Override
-	public OperationStarted deserialize(String topic, byte[] data) {
-		if (data == null) return null;
-		try {
-			String[] strs = new String(data, "UTF-8").split("\\|");
-			return new OperationStarted(new User(strs[1]), strs[0]);
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException("No UTF-8", e);
-		}
-	}
+    @Override
+    public OperationStarted deserialize(String topic, byte[] data) {
+        if (data == null) return null;
+        try {
+            String[] strs = new String(data, "UTF-8").split("\\|");
+            return new OperationStarted(new User(strs[1]), strs[0]);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("No UTF-8", e);
+        }
+    }
 
-	@Override
-	public void close() {
+    @Override
+    public void close() {
 
-	}
+    }
 }

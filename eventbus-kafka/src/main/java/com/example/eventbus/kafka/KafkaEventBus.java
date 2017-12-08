@@ -16,27 +16,27 @@ import java.util.Properties;
  */
 public class KafkaEventBus implements EventBus {
 
-	private String startedTopic;
-	private String completedTopic;
-	private KafkaProducer<String, OperationStarted> startedProducer;
-	private KafkaProducer<String, OperationCompleted> completedProducer;
+    private String startedTopic;
+    private String completedTopic;
+    private KafkaProducer<String, OperationStarted> startedProducer;
+    private KafkaProducer<String, OperationCompleted> completedProducer;
 
-	public KafkaEventBus(String address, String startedTopic, String completedTopic) {
-		this.startedTopic = startedTopic;
-		this.completedTopic = completedTopic;
-		Properties props = new Properties();
-		props.put("bootstrap.servers", address);
-		startedProducer = new KafkaProducer<>(props, new StringSerializer(), new OperationStartedSerializer());
-		completedProducer = new KafkaProducer<>(props, new StringSerializer(), new OperationCompletedSerializer());
-	}
+    public KafkaEventBus(String address, String startedTopic, String completedTopic) {
+        this.startedTopic = startedTopic;
+        this.completedTopic = completedTopic;
+        Properties props = new Properties();
+        props.put("bootstrap.servers", address);
+        startedProducer = new KafkaProducer<>(props, new StringSerializer(), new OperationStartedSerializer());
+        completedProducer = new KafkaProducer<>(props, new StringSerializer(), new OperationCompletedSerializer());
+    }
 
-	@Override
-	public void publish(OperationStarted operationStarted) {
-		startedProducer.send(new ProducerRecord<>(startedTopic, operationStarted));
-	}
+    @Override
+    public void publish(OperationStarted operationStarted) {
+        startedProducer.send(new ProducerRecord<>(startedTopic, operationStarted));
+    }
 
-	@Override
-	public void publish(OperationCompleted operationCompleted) {
-		completedProducer.send(new ProducerRecord<>(completedTopic, operationCompleted));
-	}
+    @Override
+    public void publish(OperationCompleted operationCompleted) {
+        completedProducer.send(new ProducerRecord<>(completedTopic, operationCompleted));
+    }
 }

@@ -4,9 +4,9 @@
     <title>Title</title>
 </head>
 <body>
-    <div th:each="participant : ${standings.participants}">
-        <label th:text="${participant.name}"></label>
-        <label th:text="${participant.score}"></label>
-    </div>
+<div th:each="participant : ${standings.participants}">
+    <label th:text="${participant.name}"></label>
+    <label th:text="${participant.score}"></label>
+</div>
 </body>
 </html>
