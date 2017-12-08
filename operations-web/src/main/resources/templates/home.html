@@ -22,7 +22,7 @@
         this.started = ko.observable();
         this.timer = ko.observable();
 
-        this.timerInterval;
+        var timerInterval;
 
         this.start = function () {
             $.ajax({
@@ -37,7 +37,7 @@
                     self.started(true);
                     var seconds = 0;
                     self.timer(0);
-                    self.timerInterval = setInterval(function () {
+                    timerInterval = setInterval(function () {
                         self.timer(++seconds);
                     }, 1000);
                 }
@@ -55,7 +55,7 @@
                 }),
                 success: function () {
                     self.started(false);
-                    clearInterval(self.timerInterval);
+                    clearInterval(timerInterval);
                 }
             });
         };
