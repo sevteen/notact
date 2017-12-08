@@ -24,7 +24,6 @@ public class Participant {
         return name;
     }
 
-
     public String getOperationId() {
         return operationId;
     }
