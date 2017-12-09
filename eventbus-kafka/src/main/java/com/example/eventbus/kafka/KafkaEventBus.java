@@ -8,13 +8,18 @@ import com.example.model.event.OperationStarted;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author Beka Tsotsoria
  */
 public class KafkaEventBus implements EventBus {
+
+    private final Logger log = LoggerFactory.getLogger(KafkaEventBus.class);
 
     private String address;
     private String startedTopic;
@@ -37,12 +42,20 @@ public class KafkaEventBus implements EventBus {
 
     @Override
     public void publish(OperationStarted operationStarted) {
-        startedProducer.send(new ProducerRecord<>(startedTopic, operationStarted));
+        try {
+            startedProducer.send(new ProducerRecord<>(startedTopic, operationStarted)).get();
+        } catch (InterruptedException | ExecutionException e) {
+            log.error("Failed to publish: {}", operationStarted, e);
+        }
     }
 
     @Override
     public void publish(OperationCompleted operationCompleted) {
-        completedProducer.send(new ProducerRecord<>(completedTopic, operationCompleted));
+        try {
+            completedProducer.send(new ProducerRecord<>(completedTopic, operationCompleted)).get();
+        } catch (InterruptedException | ExecutionException e) {
+            log.error("Failed to publish: {}", operationCompleted, e);
+        }
     }
 
     public void close() {
