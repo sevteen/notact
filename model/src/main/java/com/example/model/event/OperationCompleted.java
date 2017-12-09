@@ -1,10 +1,12 @@
 package com.example.model.event;
 
 
+import java.io.Serializable;
+
 /**
  * @author Beka Tsotsoria
  */
-public class OperationCompleted {
+public class OperationCompleted implements Serializable {
 
     private String user;
     private String operationId;

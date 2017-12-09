@@ -1,5 +1,6 @@
 package com.example.operations;
 
+import com.example.eventbus.activemq.ActiveMQEventBus;
 import com.example.eventbus.kafka.KafkaEventBus;
 import com.example.model.EventBus;
 import com.example.model.OperationProcessor;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 
 /**
  * @author Beka Tsotsoria
@@ -14,8 +16,8 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class Application {
 
-    @Value("${kafka.address}")
-    private String kafkaAddress;
+    @Value("${broker.address}")
+    private String brokerAddress;
 
     @Value("${topic.started}")
     private String startedTopic;
@@ -28,12 +30,19 @@ public class Application {
     }
 
     @Bean
-    public OperationProcessor operationProcessor() {
-        return new OperationProcessor(kafkaEventBus());
+    public OperationProcessor operationProcessor(EventBus eventBus) {
+        return new OperationProcessor(eventBus);
     }
 
+    @Profile("kafka")
     @Bean(initMethod = "open", destroyMethod = "close")
     public EventBus kafkaEventBus() {
-        return new KafkaEventBus(kafkaAddress, startedTopic, completedTopic);
+        return new KafkaEventBus(brokerAddress, startedTopic, completedTopic);
+    }
+
+    @Profile("activemq")
+    @Bean(initMethod = "open", destroyMethod = "close")
+    public EventBus activemqEventBus() {
+        return new ActiveMQEventBus(brokerAddress, startedTopic, completedTopic);
     }
 }

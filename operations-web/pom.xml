@@ -65,6 +65,10 @@
             <artifactId>eventbus-kafka</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>eventbus-activemq</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
             <version>${spring.boot.version}</version>

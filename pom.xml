@@ -16,6 +16,8 @@
         <module>standings-web</module>
         <module>model-kafka-serde</module>
         <module>operations-web</module>
+        <module>eventbus-activemq</module>
+        <module>standings-activemq</module>
     </modules>
 
     <build>
@@ -65,6 +67,16 @@
             <dependency>
                 <groupId>com.example</groupId>
                 <artifactId>model-kafka-serde</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.example</groupId>
+                <artifactId>standings-activemq</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.example</groupId>
+                <artifactId>eventbus-activemq</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

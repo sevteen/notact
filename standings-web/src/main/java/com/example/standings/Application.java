@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 
 /**
  * @author Beka Tsotsoria
@@ -11,8 +12,8 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class Application {
 
-    @Value("${kafka.address}")
-    private String kafkaAddress;
+    @Value("${broker.address}")
+    private String brokerAddress;
 
     @Value("${topic.started}")
     private String startedTopic;
@@ -27,9 +28,16 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
+    @Profile("kafka")
     @Bean(initMethod = "start", destroyMethod = "stop")
-    public StandingsProvider standingsProvider() {
-        return new KafkaStandingsProvider(kafkaAddress, applicationId, startedTopic, completedTopic);
+    public StandingsProvider kafkaStandingsProvider() {
+        return new KafkaStandingsProvider(brokerAddress, applicationId, startedTopic, completedTopic);
+    }
+
+    @Profile("activemq")
+    @Bean(initMethod = "start", destroyMethod = "stop")
+    public StandingsProvider activeMQStandingsProvider() {
+        return new ActiveMQStandingsProvider(brokerAddress, startedTopic, completedTopic);
     }
 
 }
