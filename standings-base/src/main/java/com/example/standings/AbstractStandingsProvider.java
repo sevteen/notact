@@ -6,8 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * @author Beka Tsotsoria
@@ -20,7 +21,9 @@ public class AbstractStandingsProvider implements StandingsProvider {
 
     @Override
     public final Standings getStandings() {
-        return new Standings(new ArrayList<>(participants.values()));
+        return new Standings(participants.values().stream()
+            .sorted(Comparator.comparing(Participant::getScore).reversed())
+            .collect(Collectors.toList()));
     }
 
     protected void onOperation(OperationStarted started) {
