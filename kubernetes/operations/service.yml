@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: operations
+  labels:
+    app: operations
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+  selector:
+    app: operations
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: operations
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: operations
+    spec:
+      containers:
+      - name: activemq
+        image: sevteen/notact-operations
+        ports:
+        - containerPort: 8080
+        env:
+          - name: APPLICATION_ID
+            value: operations
+          - name: BROKER_ADDRESS
+            value: tcp://${ACTIVEMQ_SERVICE_HOST}:${ACTIVEMQ_SERVICE_PORT}
+          - name: TOPIC_STARTED
+            value: started
+          - name: TOPIC_COMPLETED
+            value: completed
+          - name: SPRING_PROFILES_ACTIVE
+            value: activemq
+          - name: STANDINGS_URL
+            value: http://192.168.99.100:30515

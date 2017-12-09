@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: activemq
+  labels:
+    app: activemq
+spec:
+  ports:
+  - port: 61616
+  selector:
+    app: activemq
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: activemq
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: activemq
+    spec:
+      containers:
+      - name: activemq
+        image: webcenter/activemq:5.14.3
+        ports:
+        - containerPort: 8161
+        - containerPort: 61613
+        - containerPort: 61616
