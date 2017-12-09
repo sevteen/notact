@@ -18,6 +18,7 @@
         <module>operations-web</module>
         <module>eventbus-activemq</module>
         <module>standings-activemq</module>
+        <module>standings-base</module>
     </modules>
 
     <build>
@@ -47,6 +48,11 @@
             <dependency>
                 <groupId>com.example</groupId>
                 <artifactId>standings-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.example</groupId>
+                <artifactId>standings-base</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

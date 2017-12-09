@@ -8,18 +8,13 @@ import org.slf4j.LoggerFactory;
 
 import javax.jms.*;
 import java.lang.IllegalStateException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Beka Tsotsoria
  */
-public class ActiveMQStandingsProvider implements StandingsProvider {
+public class ActiveMQStandingsProvider extends AbstractStandingsProvider {
 
     private final Logger log = LoggerFactory.getLogger(ActiveMQStandingsProvider.class);
-
-    private ConcurrentHashMap<String, Participant> participants = new ConcurrentHashMap<>();
 
     private String address;
     private String startedTopic;
@@ -52,12 +47,7 @@ public class ActiveMQStandingsProvider implements StandingsProvider {
                     try {
                         Message msg = startedConsumer.receive();
                         if (msg instanceof ObjectMessage) {
-                            OperationStarted operationStarted = (OperationStarted) ((ObjectMessage) msg).getObject();
-                            boolean newParticipant = participants.putIfAbsent(operationStarted.getUser(),
-                                new Participant(operationStarted.getUser(), operationStarted.getOperationId(), LocalDateTime.now(), 0)) == null;
-                            if (newParticipant) {
-                                log.info("New participant \"{}\"", operationStarted.getUser());
-                            }
+                            onOperation((OperationStarted) ((ObjectMessage) msg).getObject());
                         }
                     } catch (JMSException e) {
                         if (started) {
@@ -72,17 +62,7 @@ public class ActiveMQStandingsProvider implements StandingsProvider {
                     try {
                         Message msg = completedConsumer.receive();
                         if (msg instanceof ObjectMessage) {
-                            OperationCompleted operationCompleted = (OperationCompleted) ((ObjectMessage) msg).getObject();
-                            Participant participant = participants.get(operationCompleted.getUser());
-                            if (participant != null) {
-                                if (!participant.getOperationId().equals(operationCompleted.getOperationId())) {
-                                    log.info("Participant \"{}\" is now busy with operation \"{}\"", participant.getOperationId());
-                                } else {
-                                    participant.calculateScore();
-                                }
-                            } else {
-                                log.info("Participant with \"{}\" does not exist", operationCompleted.getUser());
-                            }
+                            onOperation((OperationCompleted) ((ObjectMessage) msg).getObject());
                         }
                     } catch (JMSException e) {
                         if (started) {
@@ -105,10 +85,5 @@ public class ActiveMQStandingsProvider implements StandingsProvider {
         } catch (JMSException e) {
             log.warn("Failed to gracefully close ActiveMQ connection", e);
         }
-    }
-
-    @Override
-    public Standings getStandings() {
-        return new Standings(new ArrayList<>(participants.values()));
     }
 }

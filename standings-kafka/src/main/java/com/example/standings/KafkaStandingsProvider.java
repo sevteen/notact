@@ -9,23 +9,14 @@ import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KStreamBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Beka Tsotsoria
  */
 @SuppressWarnings("deprecated")
-public class KafkaStandingsProvider implements StandingsProvider {
-
-    private final Logger log = LoggerFactory.getLogger(KafkaStandingsProvider.class);
-
-    private ConcurrentHashMap<String, Participant> participants = new ConcurrentHashMap<>();
+public class KafkaStandingsProvider extends AbstractStandingsProvider {
 
     private KafkaStreams startedStreams;
     private KafkaStreams completedStreams;
@@ -37,27 +28,8 @@ public class KafkaStandingsProvider implements StandingsProvider {
         startedStreamBuilder = new StreamBuilder<>(kafkaAddress, "started-" + appId, startedTopic, ModelSerdes.OPERATION_STARTED);
         completedStreamBuilder = new StreamBuilder<>(kafkaAddress, "completed-" + appId, completedTopic, ModelSerdes.OPERATION_COMPLETED);
 
-        KStream<String, OperationStarted> startedStream = startedStreamBuilder.build();
-        startedStream.foreach((key, operationStarted) -> {
-            boolean newParticipant = participants.putIfAbsent(operationStarted.getUser(),
-                new Participant(operationStarted.getUser(), operationStarted.getOperationId(), LocalDateTime.now(), 0)) == null;
-            if (newParticipant) {
-                log.info("New participant \"{}\"", operationStarted.getUser());
-            }
-        });
-
-        completedStreamBuilder.build().foreach((key, operationCompleted) -> {
-            Participant participant = participants.get(operationCompleted.getUser());
-            if (participant != null) {
-                if (!participant.getOperationId().equals(operationCompleted.getOperationId())) {
-                    log.info("Participant \"{}\" is now busy with operation \"{}\"", participant.getOperationId());
-                } else {
-                    participant.calculateScore();
-                }
-            } else {
-                log.info("Participant with \"{}\" does not exist", operationCompleted.getUser());
-            }
-        });
+        startedStreamBuilder.build().foreach((key, operationStarted) -> onOperation(operationStarted));
+        completedStreamBuilder.build().foreach((key, operationCompleted) -> onOperation(operationCompleted));
     }
 
     public void start() {
@@ -71,11 +43,6 @@ public class KafkaStandingsProvider implements StandingsProvider {
     public void stop() {
         startedStreams.close();
         completedStreams.close();
-    }
-
-    @Override
-    public Standings getStandings() {
-        return new Standings(new ArrayList<>(participants.values()));
     }
 
     static class StreamBuilder<T> {

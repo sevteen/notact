@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.example</groupId>
-            <artifactId>standings-api</artifactId>
+            <artifactId>standings-base</artifactId>
         </dependency>
         <dependency>
             <groupId>com.example</groupId>
