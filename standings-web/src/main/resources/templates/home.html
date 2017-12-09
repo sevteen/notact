@@ -2,11 +2,27 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Standings</title>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+    <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"/>
 </head>
 <body>
-<div th:each="participant : ${standings.participants}">
-    <label th:text="${participant.name}"></label>
-    <label th:text="${participant.score}"></label>
+<div class="container">
+    <table class="table" style="margin-top: 100px;padding: 20px;">
+        <thead>
+        <tr class="row">
+            <td class="col xs-3">Participant</td>
+            <td class="col xs-5">Score</td>
+            <td class="col xs-5">Time</td>
+        </tr>
+        </thead>
+        <tr class="row" th:each="participant : ${standings.participants}">
+            <td class="col xs-3" th:text="${participant.name}"></td>
+            <td class="col xs-5" th:text="${participant.score}"></td>
+            <td class="col xs-5" th:text="${participant.dateTime}"></td>
+        </tr>
+    </table>
 </div>
 </body>
 </html>
