@@ -22,7 +22,7 @@ public class ActiveMQStandingsProvider extends AbstractStandingsProvider {
 
     private Connection connection;
     private Session session;
-    private boolean started;
+    private volatile boolean started;
 
     public ActiveMQStandingsProvider(String address, String startedTopic, String completedTopic) {
         this.address = address;
@@ -66,7 +66,7 @@ public class ActiveMQStandingsProvider extends AbstractStandingsProvider {
                         }
                     } catch (JMSException e) {
                         if (started) {
-                            log.error("Failed to receive message from topic {}", startedTopic, e);
+                            log.error("Failed to receive message from topic {}", completedTopic, e);
                         }
                     }
                 }
