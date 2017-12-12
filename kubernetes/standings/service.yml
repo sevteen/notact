@@ -17,14 +17,15 @@ metadata:
   name: standings
 spec:
   replicas: 1
+  minReadySeconds: 5
   template:
     metadata:
       labels:
         app: standings
     spec:
       containers:
-      - name: activemq
-        image: sevteen/notact-standings
+      - name: standings
+        image: sevteen/notact-standings:0.1.0-bug
         ports:
         - containerPort: 8080
         env:

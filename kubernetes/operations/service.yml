@@ -17,13 +17,14 @@ metadata:
   name: operations
 spec:
   replicas: 1
+  minReadySeconds: 5
   template:
     metadata:
       labels:
         app: operations
     spec:
       containers:
-      - name: activemq
+      - name: standings
         image: sevteen/notact-operations
         ports:
         - containerPort: 8080
@@ -39,4 +40,4 @@ spec:
           - name: SPRING_PROFILES_ACTIVE
             value: activemq
           - name: STANDINGS_URL
-            value: http://192.168.99.100:30515
+            value: http://192.168.99.100:31530
