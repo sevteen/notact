@@ -17,7 +17,6 @@ metadata:
   name: standings
 spec:
   replicas: 1
-  minReadySeconds: 5
   template:
     metadata:
       labels:
@@ -39,3 +38,7 @@ spec:
             value: completed
           - name: SPRING_PROFILES_ACTIVE
             value: activemq
+        readinessProbe:
+           tcpSocket:
+              port: 8080
+           periodSeconds: 3
